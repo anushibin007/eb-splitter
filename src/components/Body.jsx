@@ -114,19 +114,19 @@ export default function Body() {
 			{canComputeResults() && (
 				<>
 					<Descriptions title="Statistics" bordered>
-						<Descriptions.Item label="Cost per unit ($)">
+						<Descriptions.Item label="Cost per unit ($)" span={3}>
 							{resultState["cost-per-unit"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Common Units (KWh)">
+						<Descriptions.Item label="Common Units (KWh)" span={1.5}>
 							{resultState["common-units"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Common Cost per head ($)">
+						<Descriptions.Item label="Common Cost per head ($)" span={1.5}>
 							{resultState["common-cost-per-head"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Person 1 Cost ($)">
+						<Descriptions.Item label="Person 1 Cost ($)" span={1.5}>
 							{resultState["p1-cost"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Person 2 Cost ($)">
+						<Descriptions.Item label="Person 2 Cost ($)" span={1.5}>
 							{resultState["p2-cost"]}
 						</Descriptions.Item>
 					</Descriptions>
