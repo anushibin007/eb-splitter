@@ -1,4 +1,4 @@
-import { Button, Descriptions, Form, Input } from "antd";
+import { Button, Descriptions, Divider, Form, Input } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -111,6 +111,12 @@ export default function Body() {
 					/>
 				</Form.Item>
 			</Form>
+			<>
+				<Button type="default" danger onClick={resetData}>
+					Reset
+				</Button>
+			</>
+			<Divider />
 			{canComputeResults() && (
 				<>
 					<Descriptions title="Statistics" bordered>
@@ -142,11 +148,6 @@ export default function Body() {
 					</Descriptions>
 				</>
 			)}
-			<>
-				<Button type="default" danger onClick={resetData}>
-					Reset
-				</Button>
-			</>
 			{!canComputeResults() && (
 				<>
 					<p>Calculations will begin once you enter all the above data</p>
