@@ -1,4 +1,4 @@
-import { Descriptions, Form, Input } from "antd";
+import { Button, Descriptions, Form, Input } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -9,26 +9,53 @@ export default function Body() {
 		"total-units": 0,
 		"total-cost": 0,
 	};
+	const defaultResultState = {
+		"cost-per-unit": 0,
+		"common-units": 0,
+		"common-cost-per-head": 0,
+		"p1-cost": 0,
+		"p2-cost": 0,
+	};
 	const [inputState, setInputState] = useState(defaultInputState);
-	const [resultState, setResultState] = useState({ "cost-per-unit": 0 });
+	const [resultState, setResultState] = useState(defaultResultState);
 	const handleInputStateChange = (e) => {
 		const stateName = e.target.name;
 		const stateValue = e.target.value;
 		setInputState((oldState) => {
-			return { ...oldState, [stateName]: stateValue };
+			return { ...oldState, [stateName]: Number(stateValue) };
 		});
 	};
+	const canComputeResults = () => {
+		return Object.values(inputState).every((value) => value !== 0);
+	};
 	const updateResultState = () => {
+		// Skip calculations if any of input state value is 0
+		if (!canComputeResults()) {
+			return;
+		}
 		const costPerUnit = inputState["total-cost"] / inputState["total-units"];
+		const unitsCommon =
+			inputState["total-units"] - inputState["p1-units"] - inputState["p2-units"];
+		const costCommonPerHead = (unitsCommon * costPerUnit) / 2;
+		const costP1 = costCommonPerHead + costPerUnit * inputState["p1-units"];
+		const costP2 = costCommonPerHead + costPerUnit * inputState["p2-units"];
 		setResultState((oldState) => {
-			return { ...oldState, "cost-per-unit": costPerUnit };
+			return {
+				"cost-per-unit": costPerUnit,
+				"common-units": unitsCommon,
+				"common-cost-per-head": costCommonPerHead,
+				"p1-cost": costP1,
+				"p2-cost": costP2,
+			};
 		});
 	};
 	useEffect(() => {
-		console.log(inputState);
 		updateResultState();
-		console.log(resultState);
 	}, [inputState]);
+	const resetData = () => {
+		setInputState(defaultInputState);
+		setResultState(defaultResultState);
+	};
 	return (
 		<>
 			<Form layout="vertical">
@@ -73,11 +100,37 @@ export default function Body() {
 					/>
 				</Form.Item>
 			</Form>
-			<Descriptions title="Statistics" bordered>
-				<Descriptions.Item label="Cost per unit">
-					{resultState["cost-per-unit"]}
-				</Descriptions.Item>
-			</Descriptions>
+			{canComputeResults() && (
+				<>
+					<Descriptions title="Statistics" bordered>
+						<Descriptions.Item label="Cost per unit ($)">
+							{resultState["cost-per-unit"]}
+						</Descriptions.Item>
+						<Descriptions.Item label="Common Units (KWh)">
+							{resultState["common-units"]}
+						</Descriptions.Item>
+						<Descriptions.Item label="Common Cost per head ($)">
+							{resultState["common-cost-per-head"]}
+						</Descriptions.Item>
+						<Descriptions.Item label="Person 1 Cost ($)">
+							{resultState["p1-cost"]}
+						</Descriptions.Item>
+						<Descriptions.Item label="Person 2 Cost ($)">
+							{resultState["p2-cost"]}
+						</Descriptions.Item>
+					</Descriptions>
+				</>
+			)}
+			<>
+				<Button type="default" danger onClick={resetData}>
+					Reset
+				</Button>
+			</>
+			{!canComputeResults() && (
+				<>
+					<p>Calculations will begin once you enter all the above data</p>
+				</>
+			)}
 		</>
 	);
 }
