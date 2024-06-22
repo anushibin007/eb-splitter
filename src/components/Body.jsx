@@ -16,7 +16,17 @@ export default function Body() {
 		"p1-cost": 0,
 		"p2-cost": 0,
 	};
-	const [inputState, setInputState] = useState(defaultInputState);
+	const persistInputDataToLocalStorage = () => {
+		localStorage.setItem("inputState", JSON.stringify(inputState));
+	};
+	const getInitialInputState = () => {
+		const storedInputState = JSON.parse(localStorage.getItem("inputState"));
+		if (storedInputState) {
+			return storedInputState;
+		}
+		return defaultInputState;
+	};
+	const [inputState, setInputState] = useState(getInitialInputState());
 	const [resultState, setResultState] = useState(defaultResultState);
 	const handleInputStateChange = (e) => {
 		const stateName = e.target.name;
@@ -51,6 +61,7 @@ export default function Body() {
 	};
 	useEffect(() => {
 		updateResultState();
+		persistInputDataToLocalStorage();
 	}, [inputState]);
 	const resetData = () => {
 		setInputState(defaultInputState);
