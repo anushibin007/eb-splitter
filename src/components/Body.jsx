@@ -123,10 +123,20 @@ export default function Body() {
 						<Descriptions.Item label="Common Cost per head ($)" span={1.5}>
 							{resultState["common-cost-per-head"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Person 1 Cost ($)" span={1.5}>
+						<Descriptions.Item
+							label="Person 1 Cost ($)"
+							span={1.5}
+							labelStyle={{ fontWeight: "bold" }}
+							contentStyle={{ fontWeight: "bold" }}
+						>
 							{resultState["p1-cost"]}
 						</Descriptions.Item>
-						<Descriptions.Item label="Person 2 Cost ($)" span={1.5}>
+						<Descriptions.Item
+							label="Person 2 Cost ($)"
+							span={1.5}
+							labelStyle={{ fontWeight: "bold" }}
+							contentStyle={{ fontWeight: "bold" }}
+						>
 							{resultState["p2-cost"]}
 						</Descriptions.Item>
 					</Descriptions>
