@@ -156,13 +156,17 @@ export default function Body() {
 						<Col>
 							<Text>
 								Person 1 has to pay{" "}
-								<Text code>${roundNumber(resultState["p1-cost"])}</Text>
+								<Text code strong>
+									${roundNumber(resultState["p1-cost"])}
+								</Text>
 							</Text>
 						</Col>
 						<Col>
 							<Text>
-								Person 2 should pay{" "}
-								<Text code>${roundNumber(resultState["p2-cost"])}</Text>
+								Person 2 has to pay{" "}
+								<Text code strong>
+									${roundNumber(resultState["p2-cost"])}
+								</Text>
 							</Text>
 						</Col>
 					</Row>
