@@ -1,4 +1,5 @@
-import { Button, Descriptions, Divider, Form, Input } from "antd";
+import { Button, Row, Col, Descriptions, Divider, Form, Input, Typography } from "antd";
+const { Title, Text } = Typography;
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -67,90 +68,111 @@ export default function Body() {
 		setInputState(defaultInputState);
 		setResultState(defaultResultState);
 	};
+	const roundNumber = (num) => {
+		return Math.round((num + Number.EPSILON) * 100) / 100;
+	};
 	return (
 		<>
-			<Form layout="vertical">
-				<Form.Item label="Person 1 Units (KWh)">
-					<Input
-						name="p1-units"
-						value={inputState["p1-units"]}
-						type="number"
-						min={0}
-						placeholder="Enter the units consumed by Person 1"
-						onChange={handleInputStateChange}
-					/>
-				</Form.Item>
-				<Form.Item label="Person 2 Units (KWh)">
-					<Input
-						name="p2-units"
-						value={inputState["p2-units"]}
-						type="number"
-						min={0}
-						placeholder="Enter the units consumed by Person 2"
-						onChange={handleInputStateChange}
-					/>
-				</Form.Item>
-				<Form.Item label="Total Units (KWh)">
-					<Input
-						name="total-units"
-						value={inputState["total-units"]}
-						type="number"
-						min={0}
-						placeholder="Enter the total units consumed by the home"
-						onChange={handleInputStateChange}
-					/>
-				</Form.Item>
-				<Form.Item label="Total Cost ($)">
-					<Input
-						name="total-cost"
-						value={inputState["total-cost"]}
-						type="number"
-						min={0}
-						placeholder="Enter the total cost (doesn't matter what currency you use)"
-						onChange={handleInputStateChange}
-					/>
-				</Form.Item>
-			</Form>
-			<>
-				<Button type="default" danger onClick={resetData}>
-					Reset
-				</Button>
-			</>
+			<Row>
+				<Col>
+					<Title level={5}>Enter data</Title>
+				</Col>
+			</Row>
+			<Row align="middle">
+				<Col>
+					<Form style={{ marginTop: "10px" }} labelCol={{ span: 16 }}>
+						<Form.Item label="Units consumed by Person 1 (KWh)">
+							<Input
+								name="p1-units"
+								value={inputState["p1-units"]}
+								type="number"
+								min={0}
+								placeholder="Enter the units consumed by Person 1"
+								onChange={handleInputStateChange}
+							/>
+						</Form.Item>
+						<Form.Item label="Units consumed by Person 2 (KWh)">
+							<Input
+								name="p2-units"
+								value={inputState["p2-units"]}
+								type="number"
+								min={0}
+								placeholder="Enter the units consumed by Person 2"
+								onChange={handleInputStateChange}
+							/>
+						</Form.Item>
+						<Form.Item label="Total Units as per the bill (KWh)">
+							<Input
+								name="total-units"
+								value={inputState["total-units"]}
+								type="number"
+								min={0}
+								placeholder="Enter the total units consumed by the home"
+								onChange={handleInputStateChange}
+							/>
+						</Form.Item>
+						<Form.Item label="Total Cost as per the bill ($)">
+							<Input
+								name="total-cost"
+								value={inputState["total-cost"]}
+								type="number"
+								min={0}
+								placeholder="Enter the total cost (doesn't matter what currency you use)"
+								onChange={handleInputStateChange}
+							/>
+						</Form.Item>
+					</Form>
+					<>
+						<Button type="default" danger onClick={resetData}>
+							Reset
+						</Button>
+					</>
+				</Col>
+			</Row>
 			<Divider />
 			{canComputeResults() && (
 				<>
-					<Descriptions title="Statistics" bordered>
-						<Descriptions.Item label="Cost per unit ($)" span={3}>
-							{resultState["cost-per-unit"]}
-						</Descriptions.Item>
-						<Descriptions.Item label="Common Units (KWh)" span={1.5}>
-							{resultState["common-units"]}
-						</Descriptions.Item>
-						<Descriptions.Item label="Common Cost per head ($)" span={1.5}>
-							{resultState["common-cost-per-head"]}
-						</Descriptions.Item>
-						<Descriptions.Item
-							label="Person 1 Cost ($)"
-							span={1.5}
-							labelStyle={{ fontWeight: "bold" }}
-							contentStyle={{ fontWeight: "bold" }}
-						>
-							{resultState["p1-cost"]}
-						</Descriptions.Item>
-						<Descriptions.Item
-							label="Person 2 Cost ($)"
-							span={1.5}
-							labelStyle={{ fontWeight: "bold" }}
-							contentStyle={{ fontWeight: "bold" }}
-						>
-							{resultState["p2-cost"]}
-						</Descriptions.Item>
-					</Descriptions>
+					<Row>
+						<Col flex="auto">
+							<Descriptions title="Calculations" bordered>
+								<Descriptions.Item label="Cost per unit ($)" span={3}>
+									{roundNumber(resultState["cost-per-unit"])}
+								</Descriptions.Item>
+								<Descriptions.Item label="Common Units (KWh)" span={1.5}>
+									{roundNumber(resultState["common-units"])}
+								</Descriptions.Item>
+								<Descriptions.Item label="Common Cost per head ($)" span={1.5}>
+									{roundNumber(resultState["common-cost-per-head"])}
+								</Descriptions.Item>
+							</Descriptions>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<Title level={5}>Results</Title>
+						</Col>
+					</Row>
+					<Row justify="space-around">
+						<Col>
+							<Text>
+								Person 1 has to pay{" "}
+								<Text code>${roundNumber(resultState["p1-cost"])}</Text>
+							</Text>
+						</Col>
+						<Col>
+							<Text>
+								Person 2 should pay{" "}
+								<Text code>${roundNumber(resultState["p2-cost"])}</Text>
+							</Text>
+						</Col>
+					</Row>
 				</>
 			)}
 			{!canComputeResults() && (
 				<>
-					<p>Calculations will begin once you enter all the above data</p>
+					<Text italic>
+						Calculations will automatically begin once you enter all of the above data
+					</Text>
 				</>
 			)}
 		</>
