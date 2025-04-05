@@ -1,9 +1,11 @@
 import Body from "./components/Body";
 import Header from "./components/Header";
+import "./App.css";
 
 function App() {
 	return (
 		<>
+			<Header />
 			<div
 				id="container"
 				style={{
@@ -12,7 +14,6 @@ function App() {
 					padding: "20px",
 				}}
 			>
-				<Header />
 				<Body />
 			</div>
 		</>
